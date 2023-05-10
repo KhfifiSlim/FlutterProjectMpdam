@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/InfoPage.dart';
+import 'package:flutterproject/table.dart';
 import 'package:flutterproject/contact.dart';
 import 'package:flutterproject/preinscription.dart';
 import 'package:http/http.dart' as http;

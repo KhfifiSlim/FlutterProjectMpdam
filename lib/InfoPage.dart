@@ -95,7 +95,7 @@ class _InfoPageState extends State<InfoPage> {
               bottomLeft: Radius.circular(25)),
         ),
         elevation: 0.00,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.green[500],
       ),
       body: _semesters != null && _enseignants != null
           ? ListView.builder(
