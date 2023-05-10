@@ -61,7 +61,7 @@ class _MyAppState extends State<welcome> {
   }
 
 void _fetchWelcome() async {
-    final response = await http.get(Uri.parse('http://192.168.43.73:3005/welcome'));
+    final response = await http.get(Uri.parse('http://172.16.21.162:3005/welcome'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<WelcomeData> datas = [];

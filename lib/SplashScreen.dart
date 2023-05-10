@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/InfoPage.dart';
+import 'package:flutterproject/welcome.dart';
 import 'size_config.dart';
 
 class PageSplashScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _PageSplashScreenState extends State<PageSplashScreen>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>  InfoPage(),
+              builder: (context) =>   welcome(),
             ),
           );
 
