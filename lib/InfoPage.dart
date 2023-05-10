@@ -50,7 +50,7 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   void _fetchSemester() async {
-    final response = await http.get(Uri.parse('http://172.16.21.162:3000/semestres'));
+    final response = await http.get(Uri.parse('http://192.168.1.9:3000/semestres'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Semester> semesters = [];
@@ -65,7 +65,7 @@ class _InfoPageState extends State<InfoPage> {
     }
   }
   void _fetchEnseignant() async {
-    final response = await http.get(Uri.parse('http://172.16.21.162:3004/enseignants'));
+    final response = await http.get(Uri.parse('http://192.168.1.9:3004/enseignants'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Enseignant> enseignants = [];

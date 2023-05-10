@@ -61,7 +61,7 @@ class _MyAppState extends State<welcome> {
   }
 
 void _fetchWelcome() async {
-    final response = await http.get(Uri.parse('http://172.16.21.162:3005/welcome'));
+    final response = await http.get(Uri.parse('http://192.168.1.9:3005/welcome'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<WelcomeData> datas = [];
@@ -79,7 +79,7 @@ void _fetchWelcome() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome '),
+        title: Text('WELCOME PAGE'),
         titleSpacing: 00.0,
         centerTitle: true,
         toolbarHeight: 60.2,
@@ -90,38 +90,83 @@ void _fetchWelcome() async {
               bottomLeft: Radius.circular(25)),
         ),
         elevation: 0.00,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.green[500],
       ),
-      body: WelcomeDatas != null 
-          ? ListView.builder(
-        itemCount: WelcomeDatas!.length,
-        itemBuilder: (BuildContext context, int index) {
-          final welcome = WelcomeDatas![index];
-          return Card(
-            child: Column(
-              children: [
-                if (index == 0)
-                   ListTile(
-                    title: Text(welcome.title,
-                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                    
-                    textColor: Colors.blue,
-                  ),
-                  ListTile(
-                    title: Text(welcome.desc,
-                    ),
-                    
-                    
-                  ),
-              ],
-            ),
-          );
-        },
-      )
-          : Center(
-        child: CircularProgressIndicator(),
+      body: Center(
+        /** Card Widget **/
+        child: Card(
+          elevation: 50,
+          shadowColor: Colors.black,
+          color: Colors.greenAccent[100],
+          child: SizedBox(
+            width: 300,
+            height: 500,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.green[500],
+                    radius: 108,
+                    child: const CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          "https://scontent.fnbe1-2.fna.fbcdn.net/v/t39.30808-6/308189261_469439475223960_2889498895712780959_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=e3f864&_nc_ohc=xIzUi5ltVIMAX8b4gbJ&_nc_ht=scontent.fnbe1-2.fna&oh=00_AfC-tETO7ayvvhDCi5tQDxUxp7E_fu3OuHZ4jeHVkISA2Q&oe=64602967"), //NetworkImage
+                      radius: 100,
+                    ), //CircleAvatar
+                  ), //CircleAvatar
+                  const SizedBox(
+                    height: 10,
+                  ), //SizedBox
+                  Text(
+                    'MPDAM',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.green[900],
+                      fontWeight: FontWeight.w500,
+                    ), //Textstyle
+                  ), //Text
+                  const SizedBox(
+                    height: 10,
+                  ), //SizedBox
+                  WelcomeDatas != null
+  ? Text(
+      WelcomeDatas![_selectedIndex].desc,
+      style: TextStyle(
+        fontSize: 15,
+        color: Colors.green,
       ),
+    )
+  : CircularProgressIndicator(),
+ //Text
+                  const SizedBox(
+                    height: 10,
+                  ), //SizedBox
+                  SizedBox(
+                    width: 100,
+                    // RaisedButton is deprecated and should not be used
+                    // Use ElevatedButton instead
+ 
+                    // child: RaisedButton(
+                    //   onPressed: () => null,
+                    //   color: Colors.green,
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(4.0),
+                    //     child: Row(
+                    //       children: const [
+                    //         Icon(Icons.touch_app),
+                    //         Text('Visit'),
+                    //       ],
+                    //     ), //Row
+                    //   ), //Padding
+                    // ), //RaisedButton
+                  ) //SizedBox
+                ],
+              ), //Column
+            ), //Padding
+          ), //SizedBox
+        ), //Card
+      ),
+  
           
       
            bottomNavigationBar: SalomonBottomBar(
