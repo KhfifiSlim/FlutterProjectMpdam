@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'Enseignant.dart';
 import 'Semester.dart';
 import 'InfoPage.dart';
-import 'contact.dart';
+import 'FormPage.dart';
 
 class preinscription extends StatefulWidget {
   @override
@@ -181,7 +181,7 @@ class _preinscription extends State<preinscription> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>  contact(),
+                    builder: (context) =>  FormApp(),
                     fullscreenDialog: true,
                     maintainState: true,
 

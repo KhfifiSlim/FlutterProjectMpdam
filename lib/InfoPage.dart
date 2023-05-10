@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/FormPage.dart';
 import 'package:flutterproject/preinscription.dart';
 import 'package:flutterproject/welcome.dart';
 import 'package:http/http.dart' as http;
@@ -6,7 +7,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'dart:convert';
 import 'Enseignant.dart';
 import 'Semester.dart';
-import 'contact.dart';
+import 'FormPage.dart';
 import 'welcome.dart';
 
 class InfoPage extends StatefulWidget {
@@ -200,7 +201,7 @@ class _InfoPageState extends State<InfoPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>  contact(),
+                    builder: (context) =>  FormApp(),
                     fullscreenDialog: true,
                     maintainState: true,
 

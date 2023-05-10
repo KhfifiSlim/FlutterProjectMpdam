@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutterproject/FormPage.dart';
 import 'package:flutterproject/InfoPage.dart';
 import 'package:flutterproject/table.dart';
-import 'package:flutterproject/contact.dart';
+import 'package:flutterproject/FormPage.dart';
 import 'package:flutterproject/preinscription.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -191,7 +192,7 @@ void _fetchWelcome() async {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>  contact(),
+                    builder: (context) =>  FormApp(),
                     fullscreenDialog: true,
                     maintainState: true,
 
