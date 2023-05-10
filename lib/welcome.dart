@@ -8,6 +8,8 @@ import 'package:flutterproject/preinscription.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
+import 'Widgets/MenuBar.dart';
+
 class WelcomeData {
   final String title;
   final String desc;
@@ -94,6 +96,7 @@ void _fetchWelcome() async {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
+      drawer: buildMenuBar(selectedIndex: _selectedIndex),
       body: Center(
         /** Card Widget **/
         child: Card(

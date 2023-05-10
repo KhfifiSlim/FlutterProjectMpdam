@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'Enseignant.dart';
 import 'Semester.dart';
 import 'FormPage.dart';
+import 'Widgets/MenuBar.dart';
 import 'welcome.dart';
 
 class InfoPage extends StatefulWidget {
@@ -98,6 +99,7 @@ class _InfoPageState extends State<InfoPage> {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
+      drawer: buildMenuBar(selectedIndex: _selectedIndex),
       body: _semesters != null && _enseignants != null
           ? ListView.builder(
         itemCount: _semesters!.length,

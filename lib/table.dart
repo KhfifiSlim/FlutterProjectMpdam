@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterproject/preinscription.dart';
+import 'package:flutterproject/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+import 'FormPage.dart';
+import 'InfoPage.dart';
+import 'Widgets/MenuBar.dart';
 
 
 class Tables extends StatefulWidget {
@@ -11,6 +17,7 @@ class Tables extends StatefulWidget {
 }
 
 class _TablesState extends State<Tables> {
+   int _selectedIndex = 4;
   final _navBarItems = [
     SalomonBottomBarItem(
       icon: const Icon(Icons.home),
@@ -29,7 +36,7 @@ class _TablesState extends State<Tables> {
     ),
     SalomonBottomBarItem(
       icon: const Icon(Icons.format_list_bulleted),
-      title: const Text("Préinscription"),
+      title: const Text("Join"),
       selectedColor: Colors.teal,
     ),
   ];
@@ -51,6 +58,7 @@ class _TablesState extends State<Tables> {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
+      drawer: buildMenuBar(selectedIndex: _selectedIndex),
       body: Column(
         children: <Widget>[
            const Padding(padding: EdgeInsets.only(top: 30),),
@@ -104,6 +112,59 @@ class _TablesState extends State<Tables> {
           ],
         ),
         ]
+      ),bottomNavigationBar: SalomonBottomBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color(0xff6200ee),
+        unselectedItemColor: const Color(0xff757575),
+        onTap: (index) {
+          switch (index) {
+            case 0:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  welcome(),
+                    fullscreenDialog: true,
+                    maintainState: true,
+
+                  ),
+                );
+                break;
+            case 1:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InfoPage(),
+                  fullscreenDialog: true,
+                  maintainState: true,
+                ),
+              );
+              break;
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FormApp(),
+                  fullscreenDialog: true,
+                  maintainState: true,
+                ),
+              );
+              break;
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  preinscription(),
+                  fullscreenDialog: true,
+                  maintainState: true,
+                ),
+              );
+              break;
+          }
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: _navBarItems,
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/preinscription.dart';
 import 'package:flutterproject/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import 'InfoPage.dart';
+import 'Widgets/MenuBar.dart';
 
 
 void main() {
@@ -72,6 +74,7 @@ class _FormPageState extends State<FormPage> {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
+      drawer: buildMenuBar(selectedIndex: _selectedIndex),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +135,7 @@ class _FormPageState extends State<FormPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  InfoPage(),
+                  builder: (context) =>  preinscription(),
                   fullscreenDialog: true,
                   maintainState: true,
                 ),

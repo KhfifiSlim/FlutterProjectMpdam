@@ -7,6 +7,7 @@ import 'Enseignant.dart';
 import 'Semester.dart';
 import 'InfoPage.dart';
 import 'FormPage.dart';
+import 'Widgets/MenuBar.dart';
 
 class preinscription extends StatefulWidget {
   @override
@@ -60,8 +61,10 @@ class _preinscription extends State<preinscription> {
               bottomLeft: Radius.circular(25)),
         ),
         elevation: 0.00,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.green[500],
       ),
+       drawer: buildMenuBar(selectedIndex: _selectedIndex),
+
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(
