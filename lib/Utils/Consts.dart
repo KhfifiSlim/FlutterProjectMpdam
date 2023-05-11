@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/FormPage.dart';
-import 'package:flutterproject/InfoPage.dart';
-import 'package:flutterproject/welcome.dart';
-import 'package:flutterproject/table.dart';
+import 'package:flutterproject/Views/FormPage.dart';
+import 'package:flutterproject/Views/InfoPage.dart';
+import 'package:flutterproject/Views/welcome.dart';
+import 'package:flutterproject/Views/table.dart';
+import 'package:flutterproject/Views/Absences.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-import '../preinscription.dart';
+import '../Views/preinscription.dart';
 
 
 
@@ -72,12 +73,12 @@ class Consts {
           ),
         );
         break;
-        case 4:
+        case 6:
 
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  Tables(),
+            builder: (context) =>  Absences(),
           ),
         );
         break;

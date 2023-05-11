@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/InfoPage.dart';
+import 'package:flutterproject/Views/InfoPage.dart';
 
-import 'SplashScreen.dart';
+import 'Views/SplashScreen.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/Consts.dart';
-import '../welcome.dart';
+import '../Views/welcome.dart';
 
 Widget buildMenuBar({required int selectedIndex}) {
   return MenuBar(selectedIndex: selectedIndex);
@@ -91,7 +91,7 @@ class MenuBar extends StatelessWidget {
             selected: selectedIndex == 5,
           ),
           ListTile(
-            leading: Icon(Icons.table_rows_sharp),
+            leading: Icon(Icons.table_rows_outlined),
             title: Text('Liste des absences'),
             onTap: () {
               Consts.onItemTapped(context, 6);

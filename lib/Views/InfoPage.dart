@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/FormPage.dart';
-import 'package:flutterproject/preinscription.dart';
-import 'package:flutterproject/welcome.dart';
+import 'package:flutterproject/Views/FormPage.dart';
+import 'package:flutterproject/Views/preinscription.dart';
+import 'package:flutterproject/Views/welcome.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'dart:convert';
-import 'Enseignant.dart';
-import 'Semester.dart';
+import '../Enseignant.dart';
+import '../Semester.dart';
 import 'FormPage.dart';
-import 'Widgets/MenuBar.dart';
+import '../Widgets/MenuBar.dart';
 import 'welcome.dart';
 
 class InfoPage extends StatefulWidget {

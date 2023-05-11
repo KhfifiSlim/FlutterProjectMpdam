@@ -1,23 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/preinscription.dart';
-import 'package:flutterproject/welcome.dart';
+import 'package:flutterproject/Views/preinscription.dart';
+import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import 'FormPage.dart';
 import 'InfoPage.dart';
-import 'Widgets/MenuBar.dart';
+import '../Widgets/MenuBar.dart';
 
 
-class Tables extends StatefulWidget {
-    const Tables({Key? key}) : super(key: key);
+class Absences extends StatefulWidget {
+    const Absences({Key? key}) : super(key: key);
 
   @override
-  _TablesState createState() => _TablesState();
+  _AbsenceState createState() => _AbsenceState();
 }
 
-class _TablesState extends State<Tables> {
-   int _selectedIndex = 4;
+class _AbsenceState extends State<Absences> {
+   int _selectedIndex = 6;
   final _navBarItems = [
     SalomonBottomBarItem(
       icon: const Icon(Icons.home),
@@ -45,7 +45,7 @@ class _TablesState extends State<Tables> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notes Page'),
+        title: const Text('Absences'),
         titleSpacing: 00.0,
         centerTitle: true,
         toolbarHeight: 60.2,
@@ -60,59 +60,55 @@ class _TablesState extends State<Tables> {
       ),
       drawer: buildMenuBar(selectedIndex: _selectedIndex),
       body: Column(
-        children: <Widget>[
-           const Padding(padding: EdgeInsets.only(top: 30),),
-          const Text("Notes mastère:",
-                textAlign:TextAlign.start,
-                style:TextStyle(color:Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
-         Table(
-            border: TableBorder.all(width: 1.0,color: Colors.black,),
-            children: const [
-              TableRow(
-                children: [
-                  Center(child: Text("Matiére", style: TextStyle(fontWeight: FontWeight.bold))),
-                  Center(child: Text("Note DC", style: TextStyle(fontWeight: FontWeight.bold))),
-                  Center(child: Text("Note NP", style: TextStyle(fontWeight: FontWeight.bold))),
-                  Center(child: Text("Note TP", style: TextStyle(fontWeight: FontWeight.bold))),
-                  Center(child: Text("Semestre", style: TextStyle(fontWeight: FontWeight.bold))),
-                ],
-              ),
-      
-          
-             TableRow(
-              children: [
-                Center(child: Text("Architecture", style: TextStyle(fontWeight: FontWeight.bold))),
-                Center(child: Text("14")),
-                Center(child: Text("14")),
-                Center(child: Text("14")),
-                Center(child: Text("S1", style: TextStyle(fontWeight: FontWeight.bold)))
-              ]
-            ),
-             TableRow(
-              children: [
-                Center(child: Text("UI/UX", style: TextStyle(fontWeight: FontWeight.bold))),
-                Center(child: Text("12")),
-                Center(child: Text("12")),
-                Center(child: Text("12")),
-                Center(child: Text("S1", style: TextStyle(fontWeight: FontWeight.bold)))
-
-              ]
-            ),
-             TableRow(
-              children: [
-                Center(child: Text("Dév app web", style: TextStyle(fontWeight: FontWeight.bold))),
-                Center(child: Text("18")),
-                Center(child: Text("18")),
-                Center(child: Text("18")),
-                Center(child: Text("S1", style: TextStyle(fontWeight: FontWeight.bold)))
-              ]
-            )
-            
-            
-          ],
-        ),
-        ]
-      ),bottomNavigationBar: SalomonBottomBar(
+  children: <Widget>[
+    const Padding(padding: EdgeInsets.only(top: 130)),
+    const Text(
+      "Liste des Absences :",
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 25,
+      ),
+    ),
+    Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: Table(
+        border: TableBorder.all(width: 1.0, color: Colors.black),
+        children: const [
+          TableRow(
+            children: [
+              Center(child: Text("Matiére", style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text("Nombre d'absence", style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text("Semestre", style: TextStyle(fontWeight: FontWeight.bold))),
+            ],
+          ),
+          TableRow(
+            children: [
+              Center(child: Text("Architecture", style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text("2")),
+              Center(child: Text("S1", style: TextStyle(fontWeight: FontWeight.bold))),
+            ],
+          ),
+          TableRow(
+            children: [
+              Center(child: Text("UI/UX", style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text("5")),
+              Center(child: Text("S1", style: TextStyle(fontWeight: FontWeight.bold))),
+            ],
+          ),
+          TableRow(
+            children: [
+              Center(child: Text("Dév app web", style: TextStyle(fontWeight: FontWeight.bold))),
+              Center(child: Text("1")),
+              Center(child: Text("S1", style: TextStyle(fontWeight: FontWeight.bold))),
+            ],
+          ),
+        ],
+      ),
+    ),
+  ],
+),bottomNavigationBar: SalomonBottomBar(
         currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xff6200ee),
         unselectedItemColor: const Color(0xff757575),

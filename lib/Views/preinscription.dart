@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/welcome.dart';
+import 'package:flutterproject/Views/welcome.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'dart:convert';
-import 'Enseignant.dart';
-import 'Semester.dart';
+import '../Enseignant.dart';
+import '../Semester.dart';
 import 'InfoPage.dart';
 import 'FormPage.dart';
-import 'Widgets/MenuBar.dart';
+import '../Widgets/MenuBar.dart';
 
 class preinscription extends StatefulWidget {
   @override
@@ -144,9 +144,13 @@ class _preinscription extends State<preinscription> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
-              child: Text('Submit'),
-            ),
+  onPressed: () {},
+  child: Text('Submit'),
+  style: ButtonStyle(
+    backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 22, 241, 102)),
+  ),
+)
+
           ],
         ),
       ),

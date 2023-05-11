@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/preinscription.dart';
-import 'package:flutterproject/welcome.dart';
+import 'package:flutterproject/Views/preinscription.dart';
+import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-import 'InfoPage.dart';
-import 'Widgets/MenuBar.dart';
+import '../Views/InfoPage.dart';
+import '../Widgets/MenuBar.dart';
 
 
 void main() {
@@ -90,6 +90,8 @@ class _FormPageState extends State<FormPage> {
               height: 350,
               child: Container(
                 child: ContactForm(),
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+
               ),
             ),
           ],

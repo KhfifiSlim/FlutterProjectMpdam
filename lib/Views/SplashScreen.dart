@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/InfoPage.dart';
-import 'package:flutterproject/welcome.dart';
-import 'size_config.dart';
+import 'package:flutterproject/Views/InfoPage.dart';
+import 'package:flutterproject/Views/welcome.dart';
+import '../Config/size_config.dart';
 
 class PageSplashScreen extends StatefulWidget {
   const PageSplashScreen({Key? key}) : super(key: key);
