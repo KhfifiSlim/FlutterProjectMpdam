@@ -7,6 +7,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'dart:convert';
 import '../Enseignant.dart';
 import '../Semester.dart';
+import '../Utils/Consts.dart';
 import 'FormPage.dart';
 import '../Widgets/MenuBar.dart';
 import 'welcome.dart';
@@ -20,28 +21,7 @@ class _InfoPageState extends State<InfoPage> {
   List<Semester>? _semesters;
   List<Enseignant>? _enseignants;
   int _selectedIndex = 1;
-  final _navBarItems = [
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.home),
-      title: const Text("Home"),
-      selectedColor: Colors.purple,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.info),
-      title: const Text("Info"),
-      selectedColor: Colors.pink,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.contact_mail),
-      title: const Text("Contact Us"),
-      selectedColor: Colors.orange,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.format_list_bulleted),
-      title: const Text("Préinscription"),
-      selectedColor: Colors.teal,
-    ),
-  ];
+
 
 
   @override
@@ -229,7 +209,7 @@ class _InfoPageState extends State<InfoPage> {
               _selectedIndex = index;
             });
           },
-          items: _navBarItems),
+          items: Consts.navBarItems),
     );
 
   }

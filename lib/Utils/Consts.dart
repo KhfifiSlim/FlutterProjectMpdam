@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Views/FormPage.dart';
 import 'package:flutterproject/Views/InfoPage.dart';
+import 'package:flutterproject/Views/ListeEnseignant.dart';
+import 'package:flutterproject/Views/login.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:flutterproject/Views/table.dart';
 import 'package:flutterproject/Views/Absences.dart';
@@ -11,21 +13,26 @@ import '../Views/preinscription.dart';
 
 
 class Consts {
-  static final navBarItems = [
+ static final navBarItems = [
     SalomonBottomBarItem(
       icon: const Icon(Icons.home),
       title: const Text("Home"),
-      selectedColor: Colors.teal,
+      selectedColor: Colors.purple,
     ),
     SalomonBottomBarItem(
-      icon: const Icon(Icons.calendar_today_outlined),
-      title: const Text("Reservation"),
+      icon: const Icon(Icons.info),
+      title: const Text("Info"),
       selectedColor: Colors.pink,
     ),
     SalomonBottomBarItem(
-      icon: const Icon(Icons.account_circle),
-      title: const Text("Profile"),
-      selectedColor: Colors.purple,
+      icon: const Icon(Icons.contact_mail),
+      title: const Text("Contact Us"),
+      selectedColor: Colors.orange,
+    ),
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.format_list_bulleted),
+      title: const Text("Préinscription"),
+      selectedColor: Colors.teal,
     ),
   ];
   static void onItemTapped(BuildContext context,int index) {
@@ -73,12 +80,29 @@ class Consts {
           ),
         );
         break;
+        case 5:
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  ListeEnsPage(),
+          ),
+        );
+        break;
         case 6:
 
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>  Absences(),
+          ),
+        );
+        break;
+        case 7:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  PageLogin(),
           ),
         );
         break;

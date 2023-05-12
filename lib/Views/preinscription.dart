@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'dart:convert';
 import '../Enseignant.dart';
 import '../Semester.dart';
+import '../Services/ApiClient.dart';
+import '../Utils/Consts.dart';
 import 'InfoPage.dart';
 import 'FormPage.dart';
 import '../Widgets/MenuBar.dart';
@@ -16,34 +19,61 @@ class preinscription extends StatefulWidget {
 
 class _preinscription extends State<preinscription> {
   int _selectedIndex = 3;
-  final _navBarItems = [
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.home),
-      title: const Text("Home"),
-      selectedColor: Colors.purple,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.info),
-      title: const Text("Info"),
-      selectedColor: Colors.pink,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.contact_mail),
-      title: const Text("Contact Us"),
-      selectedColor: Colors.orange,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.format_list_bulleted),
-      title: const Text("Préinscription"),
-      selectedColor: Colors.teal,
-    ),
-  ];
-
+ 
+   final formKey = GlobalKey<FormState>();
+  String? name = "";
+  String? email = "";
+  int? phone = 0;
+  String? baccalaureate = "";
+  String? l1 = "";
+  String? l2 = "";
+  String? l3 = "";
+  String? pfe = "";
+  String? formattedDate = DateFormat('yyyy/MM/dd').format(DateTime.now());
 
   @override
   void initState() {
     super.initState();
   }
+ void submitForm() async {
+  if (!formKey.currentState!.validate()) {
+    // Form is not valid
+    return;
+  }
+
+  // Form is valid, save the data
+  formKey.currentState!.save();
+
+  // prepare the request body
+  Map<String, dynamic> body = {
+    'nom': name,
+    'email': email,
+    'num': phone,
+    'date': formattedDate,
+    'moyBac': baccalaureate,
+    'moy1': l1,
+    'moy2': l2,
+    'moy3': l3,
+    'pfe': pfe,
+  };
+  String requestBodyJson = json.encode(body);
+
+  try {
+    // Make the API call
+    await ApiClient.postpreinscription(requestBodyJson);
+
+    // Show a success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Form submitted successfully')),
+    );
+  } catch (e) {
+    // Show an error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to submit form')),
+    );
+  }
+}
+
 
 
   @override
@@ -67,93 +97,125 @@ class _preinscription extends State<preinscription> {
 
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Préinscription Form',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  name = value;
+                },
               ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Full Name',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Phone Number',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Notes:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Baccalaureate Note',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'L1 Note',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'L2 Note',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'L3 Note',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'PFE Note',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-  onPressed: () {},
-  child: Text('Submit'),
-  style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 22, 241, 102)),
-  ),
-)
+               TextFormField(
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your Email';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  email = value;
+                },
+              ), TextFormField(
+                   decoration: InputDecoration(labelText: 'Phone'),
+                   validator: (value) {
+                 if (value!.isEmpty) {
+                   return 'Please enter your Phone';
+                     }
+                       return null;
+                                 },
+                  onSaved: (value) {
+                         phone = int.parse(value!);
+                                      },
+                    ),
 
-          ],
-        ),
-      ),
+             TextFormField(
+                decoration: InputDecoration(labelText: 'moy1'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your moy1';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  l1 = value;
+                },
+              ), TextFormField(
+                decoration: InputDecoration(labelText: 'moy2'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your moy2';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  l2 = value;
+                },
+              ), TextFormField(
+                decoration: InputDecoration(labelText: 'moy3'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your moy3';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  l3 = value;
+                },
+              ), TextFormField(
+                decoration: InputDecoration(labelText: 'pfe'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your pfe';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  pfe = value;
+                },
+              ), TextFormField(
+                decoration: InputDecoration(labelText: 'moyBac'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your moyBac';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  baccalaureate = value;
+                },
+              ),  SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+              
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    primary: Colors.white,
+                    backgroundColor: Colors.green,
+                  ),
+                  onPressed: () {
+                      submitForm();
+                    }
+                 ,
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),]
+      ),)),
 
 
       bottomNavigationBar: SalomonBottomBar(
@@ -202,7 +264,7 @@ class _preinscription extends State<preinscription> {
               _selectedIndex = index;
             });
           },
-          items: _navBarItems),    );
+          items: Consts.navBarItems),    );
 
   }
 }

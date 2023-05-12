@@ -3,6 +3,7 @@ import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
+import '../Utils/Consts.dart';
 import '../Views/InfoPage.dart';
 import '../Widgets/MenuBar.dart';
 
@@ -35,28 +36,6 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
    int _selectedIndex = 2;
-  final _navBarItems = [
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.home),
-      title: const Text("Home"),
-      selectedColor: Colors.purple,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.info),
-      title: const Text("Info"),
-      selectedColor: Colors.pink,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.contact_mail),
-      title: const Text("Contact Us"),
-      selectedColor: Colors.orange,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.format_list_bulleted),
-      title: const Text("Join"),
-      selectedColor: Colors.teal,
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,14 +54,15 @@ class _FormPageState extends State<FormPage> {
         backgroundColor: Colors.green[500],
       ),
       drawer: buildMenuBar(selectedIndex: _selectedIndex),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'Contact Form',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 44,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -148,7 +128,7 @@ class _FormPageState extends State<FormPage> {
             _selectedIndex = index;
           });
         },
-        items: _navBarItems,
+        items: Consts.navBarItems,
       ),
    
     );
@@ -228,7 +208,6 @@ class _ContactFormState extends State<ContactForm> {
     ));
 
    formWidget.add(SizedBox(
-  height: 150,
   child: TextFormField(
     decoration: const InputDecoration(
       hintText: 'Message',
@@ -236,7 +215,7 @@ class _ContactFormState extends State<ContactForm> {
       contentPadding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
 
     ),
-    keyboardType: TextInputType.number,
+    keyboardType: TextInputType.text,
     validator: (value) {
       if (value!.isEmpty) {
         return 'Enter Message';

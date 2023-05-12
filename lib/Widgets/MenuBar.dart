@@ -29,7 +29,7 @@ class MenuBar extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -43,60 +43,68 @@ class MenuBar extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
             onTap: () {
               Consts.onItemTapped(context, 0);
             },
             selected: selectedIndex == 0,
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text('Info Page'),
+            leading: const Icon(Icons.info),
+            title: const Text('Info Page'),
             onTap: () {
               Consts.onItemTapped(context, 1);
             },
             selected: selectedIndex == 1,
           ),
           ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text('Contact Us'),
+            leading: const Icon(Icons.contact_mail),
+            title: const Text('Contact Us'),
             onTap: () {
               Consts.onItemTapped(context, 2);
             },
             selected: selectedIndex == 2,
           ),
           ListTile(
-            leading: Icon(Icons.contact_page),
-            title: Text('Pré-inscription'),
+            leading: const Icon(Icons.contact_page),
+            title: const Text('Pré-inscription'),
             onTap: () {
               Consts.onItemTapped(context, 3);
             },
             selected: selectedIndex == 3,
           ),
           ListTile(
-            leading: Icon(Icons.note),
-            title: Text('Liste des notes'),
+            leading: const Icon(Icons.note),
+            title: const Text('Liste des notes'),
             onTap: () {
               Consts.onItemTapped(context, 4);
             },
             selected: selectedIndex == 4,
           ),
           ListTile(
-            leading: Icon(Icons.table_rows),
-            title: Text('Emploi du temp'),
+            leading: const Icon(Icons.table_rows),
+            title: const Text('Listes des enseignants'),
             onTap: () {
               Consts.onItemTapped(context, 5);
             },
             selected: selectedIndex == 5,
           ),
           ListTile(
-            leading: Icon(Icons.table_rows_outlined),
-            title: Text('Liste des absences'),
+            leading: const Icon(Icons.table_rows_outlined),
+            title: const Text('Liste des absences'),
             onTap: () {
               Consts.onItemTapped(context, 6);
             },
             selected: selectedIndex == 6,
+          ),
+          ListTile(
+            leading: const Icon(Icons.login),
+            title: const Text('Login'),
+            onTap: () {
+              Consts.onItemTapped(context, 7);
+            },
+            selected: selectedIndex == 7,
           ),
           
         ],

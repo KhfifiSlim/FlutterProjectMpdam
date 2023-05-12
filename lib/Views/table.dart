@@ -4,6 +4,7 @@ import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
+import '../Utils/Consts.dart';
 import 'FormPage.dart';
 import 'InfoPage.dart';
 import '../Widgets/MenuBar.dart';
@@ -18,28 +19,7 @@ class Tables extends StatefulWidget {
 
 class _TablesState extends State<Tables> {
    int _selectedIndex = 4;
-  final _navBarItems = [
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.home),
-      title: const Text("Home"),
-      selectedColor: Colors.purple,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.info),
-      title: const Text("Info"),
-      selectedColor: Colors.pink,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.contact_mail),
-      title: const Text("Contact Us"),
-      selectedColor: Colors.orange,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.format_list_bulleted),
-      title: const Text("Join"),
-      selectedColor: Colors.teal,
-    ),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +148,7 @@ class _TablesState extends State<Tables> {
             _selectedIndex = index;
           });
         },
-        items: _navBarItems,
+        items: Consts.navBarItems,
       ),
     );
   }
