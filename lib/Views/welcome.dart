@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Views/FormPage.dart';
 import 'package:flutterproject/Views/InfoPage.dart';
-import 'package:flutterproject/Views/table.dart';
 import 'package:flutterproject/Views/FormPage.dart';
 import 'package:flutterproject/Views/preinscription.dart';
 import 'package:http/http.dart' as http;
