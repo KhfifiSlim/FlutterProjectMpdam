@@ -1,243 +1,326 @@
-import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/Views/InfoPage.dart';
+import 'package:flutterproject/Services/ApiClient.dart';
+import 'package:flutterproject/Views/preinscription.dart';
+import 'package:flutterproject/Views/register.dart';
 import 'package:flutterproject/Views/welcome.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:snippet_coder_utils/ProgressHUD.dart';
+
 import '../Config/size_config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:http/http.dart' as http;
-
+import '../../models/login_request_model.dart';
+import '../Utils/Consts.dart';
 import '../Widgets/MenuBar.dart';
+import 'FormPage.dart';
+import 'InfoPage.dart';
 
 class PageLogin extends StatefulWidget {
   const PageLogin({Key? key}) : super(key: key);
 
+  
   @override
-  State<PageLogin> createState() => _PageLoginState();
+  _PageLoginState createState() => _PageLoginState();
 }
 
 class _PageLoginState extends State<PageLogin> {
-    int _selectedIndex = 7;
+  bool isApiCallProcess = false;
+  bool hidePassword = true;
+     int _selectedIndex = 7;
 
+  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  late String userName;
+  late String password;
+  String appName = "Mpdam";
 
-  bool remember = false;
-  final _formKey = GlobalKey<FormState>();
-  String _email = "";
-  String _password = "";
-  String url ="http://192.168.1.9:5000";
-
-
-  void _submitlog() async {
-
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      if ( _email != "" && _password != "")
-      {
-
-        final response = await http.post(
-          Uri.parse('${url}/users/login'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode({
-            "email": _email,
-            "password": _password,
-          }),
-        );
-
-
-        if (response.statusCode == 201) {
-          final jsonResponse = json.decode(response.body);
-          final token = jsonResponse['token'];
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', token);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InfoPage()),
-          );
-        }
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Invalid credentials"),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        }
-      }
-
-      else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Fill Credientiels"),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
-    }
-
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text('Sign in'),
-         titleSpacing: 00.0,
-        centerTitle: true,
-        toolbarHeight: 60.2,
-        toolbarOpacity: 0.8,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(25),
-              bottomLeft: Radius.circular(25)),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xff575de3),
+        body: ProgressHUD(
+          child: Form(
+            key: globalFormKey,
+            child: _loginUI(context),
+          ),
+          inAsyncCall: isApiCallProcess,
+          opacity: 0.3,
+          key: UniqueKey(),
         ),
-        elevation: 0.00,
-        backgroundColor: Colors.green[500],
       ),
-     drawer: buildMenuBar(selectedIndex: _selectedIndex),
+    );
+  }
 
-      body: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: Column(
-            children: [
-              SizedBox(height: SizeConfig.screenHeight * 0.04),
-              Text(
-                "Welcome MPDAM",
+  Widget _loginUI(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Login'),
+      backgroundColor: Colors.green[500],
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(100),
+          bottomLeft: Radius.circular(100),
+        ),
+      ),
+      elevation: 0.0,
+    ),
+    drawer: buildMenuBar(selectedIndex: _selectedIndex),
+
+    body: SingleChildScrollView(
+      
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height / 2.5,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.white,
+                  Colors.white,
+                ],
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.center,
+                  child: Image.asset("assets/login.gif",
+                    fit: BoxFit.contain,
+                    width: 220,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 20, bottom: 30, top: 50),
+            child: Center(
+              child: Text(
+                "Login",
                 style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: getProportionateScreenWidth(28),
                   fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: SizeConfig.screenHeight * 0.08),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Email",
-                        hintText: "Enter your email",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Icon(Icons.email),
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      onSaved: (value) {
-                        if (value != null) {
-                          _email = value;
-                        }
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenHeight(20),
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Password",
-                        hintText: "Enter your Password",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Icon(Icons.key),
-                        ),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      onSaved: (value) {
-                        if (value != null) {
-                          _password = value;
-                        }
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenHeight(20),
-                    ),
-                  ],
+                  fontSize: 35,
+                  color: Colors.black,
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                height: getProportionateScreenHeight(56),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    primary: Colors.white,
-                    backgroundColor: Colors.green,
-                  ),
-                  onPressed: () {
-                    _submitlog();
-                  },
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(18),
-                      color: Colors.white,
-                    ),
-                  ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: FormHelper.inputFieldWidget(
+              context,
+              "Username",
+              "Username",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Username can\'t be empty.';
+                }
+
+                return null;
+              },
+              (onSavedVal) => {
+                userName = onSavedVal,
+              },
+              initialValue: "",
+              obscureText: false,
+              borderFocusColor: Colors.black,
+              prefixIconColor: Colors.black,
+              borderColor: Colors.black,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: FormHelper.inputFieldWidget(
+              context,
+              "Password",
+              "Password",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Password can\'t be empty.';
+                }
+
+                return null;
+              },
+              (onSavedVal) => {
+                password = onSavedVal,
+              },
+              initialValue: "",
+              obscureText: hidePassword,
+              borderFocusColor: Colors.black,
+              prefixIconColor: Colors.black,
+              borderColor: Colors.black,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+                color: Colors.black.withOpacity(0.7),
+                icon: Icon(
+                  hidePassword ? Icons.visibility_off : Icons.visibility,
                 ),
               ),
-              SizedBox(height: getProportionateScreenHeight(20)),
-            
-            ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: FormHelper.submitButton(
+              "Login",
+              () {
+                if (validateAndSave()) {
+                  setState(() {
+                    isApiCallProcess = true;
+                  });
+
+                  LoginRequestModel model = LoginRequestModel(
+                    email: userName,
+                    password: password,
+                  );
+
+                  ApiClient.login(model).then(
+                    (response) {
+                      setState(() {
+                        isApiCallProcess = false;
+                      });
+                     // print("aaaaaaa123"+response);
+
+                      if (response == "Success") {
+                         Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => welcome()),
+        );
+                      } else if (response == "Invalid Email!") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Invalid Email')),
+                      );
+                      } else if (response == "Invalid Password!") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Invalid password')),
+                      );
+                      }
+                    },
+                  );
+                }
+              },
+              btnColor: Color.fromARGB(255, 67, 203, 76),
+              borderColor: Colors.black,
+              txtColor: Colors.black,
+              borderRadius: 10,
+            ),
+          ),
+          Divider(),
+          Align(
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PageRegister()),
+              );
+            },
+            child: Text(
+              "Register now ",
+              style: TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.none,
+              ),
+            ),
           ),
         ),
+          const SizedBox(
+            height: 20,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+        
+      ),
+    
+    ),bottomNavigationBar: SalomonBottomBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color(0xff6200ee),
+        unselectedItemColor: const Color(0xff757575),
+        onTap: (index) {
+          switch (index) {
+            case 0:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  welcome(),
+                    fullscreenDialog: true,
+                    maintainState: true,
+
+                  ),
+                );
+                break;
+            case 1:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InfoPage(),
+                  fullscreenDialog: true,
+                  maintainState: true,
+                ),
+              );
+              break;
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FormApp(),
+                  fullscreenDialog: true,
+                  maintainState: true,
+                ),
+              );
+              break;
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  preinscription(),
+                  fullscreenDialog: true,
+                  maintainState: true,
+                ),
+              );
+              break;
+          }
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: Consts.navBarItems,
       ),
     );
   }
 
-  TextFormField formEmail(){
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Icon(Icons.email),
-        ),
-
-      ),
-      keyboardType: TextInputType.emailAddress,
-    );
-  }
-
-  TextFormField formPassword(){
-    return TextFormField(
-      obscureText: true,
-      decoration: InputDecoration(
-        labelText: "Password",
-        hintText: "Enter your Password",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Icon(Icons.key),
-        ),
-
-      ),
-      keyboardType: TextInputType.visiblePassword,
-    );
+  bool validateAndSave() {
+    final form = globalFormKey.currentState;
+    if (form!.validate()) {
+      form!.save();
+      return true;
+    }
+    return false;
   }
 }
-
-
-

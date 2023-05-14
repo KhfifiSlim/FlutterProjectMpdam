@@ -4,7 +4,7 @@ import 'package:flutterproject/Views/InfoPage.dart';
 import 'package:flutterproject/Views/ListeEnseignant.dart';
 import 'package:flutterproject/Views/login.dart';
 import 'package:flutterproject/Views/welcome.dart';
-import 'package:flutterproject/Views/table.dart';
+import 'package:flutterproject/Views/StudentAbcencePage.dart';
 import 'package:flutterproject/Views/Absences.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
@@ -76,7 +76,7 @@ class Consts {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  Tables(),
+            builder: (context) =>  StudentAbcencePage(),
           ),
         );
         break;
