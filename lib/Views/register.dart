@@ -1,13 +1,11 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Services/ApiClient.dart';
 import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
-
-import '../Config/size_config.dart';
 import '../../models/login_request_model.dart';
 import '../Utils/Consts.dart';
 import '../Widgets/MenuBar.dart';
@@ -27,6 +25,7 @@ class _PageRegisterState extends State<PageRegister> {
   bool isApiCallProcess = false;
   bool hidePassword = true;
      int _selectedIndex = 7;
+      bool checkuser=false;
 
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   late String userName;
@@ -37,6 +36,14 @@ class _PageRegisterState extends State<PageRegister> {
   @override
   void initState() {
     super.initState();
+    _checkUserId();
+  }
+   void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
   }
 
   @override
@@ -335,8 +342,7 @@ class _PageRegisterState extends State<PageRegister> {
             _selectedIndex = index;
           });
         },
-        items: Consts.navBarItems,
-      ),
+        items: checkuser ? Consts.navBarItems2: Consts.navBarItems),
     );
   }
 

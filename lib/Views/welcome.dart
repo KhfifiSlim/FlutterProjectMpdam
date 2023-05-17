@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Views/FormPage.dart';
 import 'package:flutterproject/Views/InfoPage.dart';
-import 'package:flutterproject/Views/FormPage.dart';
 import 'package:flutterproject/Views/preinscription.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Utils/Consts.dart';
 import '../Widgets/MenuBar.dart';
+import '../Widgets/MenuBar2.dart';
 
 class WelcomeData {
   final String title;
@@ -31,38 +33,24 @@ class welcome extends StatefulWidget {
 }
 
 class _MyAppState extends State<welcome> {
+  bool checkuser=false;
   List<WelcomeData>? WelcomeDatas;
   int _selectedIndex = 0;
-  final _navBarItems = [
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.home),
-      title: const Text("Home"),
-      selectedColor: Colors.purple,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.info),
-      title: const Text("Info"),
-      selectedColor: Colors.pink,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.contact_mail),
-      title: const Text("Contact Us"),
-      selectedColor: Colors.orange,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(Icons.format_list_bulleted),
-      title: const Text("Join"),
-      selectedColor: Colors.teal,
-    ),
-  ];
-
-
+ 
   @override
   void initState() {
     super.initState();
+    _checkUserId();
     _fetchWelcome();
+    
   }
-
+  void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
+  }
 void _fetchWelcome() async {
     final response = await http.get(Uri.parse('http://192.168.1.9:3005/welcome'));
     if (response.statusCode == 200) {
@@ -80,6 +68,7 @@ void _fetchWelcome() async {
   }
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('WELCOME PAGE'),
@@ -95,7 +84,7 @@ void _fetchWelcome() async {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
-      drawer: buildMenuBar(selectedIndex: _selectedIndex),
+      drawer: checkuser ? buildMenuBar2(selectedIndex: _selectedIndex) : buildMenuBar(selectedIndex: _selectedIndex),
       body: Center(
         /** Card Widget **/
         child: Card(
@@ -147,22 +136,6 @@ void _fetchWelcome() async {
                   ), //SizedBox
                   SizedBox(
                     width: 100,
-                    // RaisedButton is deprecated and should not be used
-                    // Use ElevatedButton instead
- 
-                    // child: RaisedButton(
-                    //   onPressed: () => null,
-                    //   color: Colors.green,
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(4.0),
-                    //     child: Row(
-                    //       children: const [
-                    //         Icon(Icons.touch_app),
-                    //         Text('Visit'),
-                    //       ],
-                    //     ), //Row
-                    //   ), //Padding
-                    // ), //RaisedButton
                   ) //SizedBox
                 ],
               ), //Column
@@ -217,7 +190,7 @@ void _fetchWelcome() async {
               _selectedIndex = index;
             });
           },
-          items: _navBarItems),
+          items: checkuser ? Consts.navBarItems2: Consts.navBarItems),
       );
     
   }

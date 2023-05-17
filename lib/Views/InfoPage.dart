@@ -4,6 +4,7 @@ import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Enseignant.dart';
 import '../Semester.dart';
@@ -21,16 +22,24 @@ class _InfoPageState extends State<InfoPage> {
   List<Semester>? _semesters;
   List<Enseignant>? _enseignants;
   int _selectedIndex = 1;
+  bool checkuser=false;
 
 
 
   @override
   void initState() {
     super.initState();
+    _checkUserId();
     _fetchSemester();
     _fetchEnseignant();
   }
-
+ void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
+  }
   void _fetchSemester() async {
     final response = await http.get(Uri.parse('http://192.168.1.9:3000/semestres'));
     if (response.statusCode == 200) {
@@ -209,7 +218,7 @@ class _InfoPageState extends State<InfoPage> {
               _selectedIndex = index;
             });
           },
-          items: Consts.navBarItems),
+         items: checkuser ? Consts.navBarItems2: Consts.navBarItems),
     );
 
   }

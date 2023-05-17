@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/AbsenceResp.dart';
 
+import '../models/NotesResp.dart';
 import '../models/login_request_model.dart';
 class ApiClient {
     static var client = http.Client();
@@ -14,17 +15,32 @@ static String idlogged = "";
   
  static const String url="127.0.0.1:4000";
 
- //load absences par user
+ //student absences
  static Future<AbsenceResp> fetchStudent() async {
-    //id par defaut=64600036e0b41de95f4aff4d
-    //change it with shared pref after login
+   
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('userid');
     final response =
-    await http.get(Uri.parse('http://127.0.0.1:4000/absence/list/64600036e0b41de95f4aff4d'));
+    await http.get(Uri.parse('http://127.0.0.1:4000/absence/list/${uid}'));
 
     if (response.statusCode == 200) {
       return AbsenceResp.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to load student');
+      throw Exception('Failed to load student abcenses');
+    }
+  }
+  //student notes
+ static Future<NotesResp> fetchStudentNotes() async {
+   
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('userid');
+    final response =
+    await http.get(Uri.parse('http://127.0.0.1:4000/note/list/${uid}'));
+
+    if (response.statusCode == 200) {
+      return NotesResp.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load notes');
     }
   }
  static Future<void> postpreinscription(String requestBodyJson) async {
@@ -66,22 +82,16 @@ static Future<String> login(
     );
     var responseBody = jsonDecode(response.body);
     var message = responseBody['message'];
-    //var token = responseBody['data']['token'];
-    debugPrint('Response body message api : ${message}');
-    //debugPrint('Response body: ${token}');
-
     if (message == "Success") {
    
       var responseBody = jsonDecode(response.body);
       var token = responseBody['data']['token'];
       idlogged = responseBody['data']['id'];
-      userTel = responseBody['data']['tel'];
-    //  debugPrint(idlogged);
-      
+      userTel = responseBody['data']['tel'];  
        SharedPreferences.getInstance().then((SharedPreferences prefs) {
        prefs.setString('token' , token);
-       print('Token get: $token');
-   
+       prefs.setString('userid' , idlogged);
+       
       
     });
     

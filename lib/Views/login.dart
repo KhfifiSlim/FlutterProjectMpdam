@@ -1,14 +1,12 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Services/ApiClient.dart';
 import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/register.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
-
-import '../Config/size_config.dart';
 import '../../models/login_request_model.dart';
 import '../Utils/Consts.dart';
 import '../Widgets/MenuBar.dart';
@@ -29,13 +27,22 @@ class _PageLoginState extends State<PageLogin> {
      int _selectedIndex = 7;
 
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  late String userName;
+  late String email;
   late String password;
   String appName = "Mpdam";
+  bool checkuser=false;
 
   @override
   void initState() {
     super.initState();
+    _checkUserId();
+  }
+   void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
   }
 
   @override
@@ -119,17 +126,17 @@ class _PageLoginState extends State<PageLogin> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "Username",
-              "Username",
+              "Email",
+              "Email",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Username can\'t be empty.';
+                  return 'email can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                userName = onSavedVal,
+                email = onSavedVal,
               },
               initialValue: "",
               obscureText: false,
@@ -191,7 +198,7 @@ class _PageLoginState extends State<PageLogin> {
                   });
 
                   LoginRequestModel model = LoginRequestModel(
-                    email: userName,
+                    email: email,
                     password: password,
                   );
 
@@ -295,23 +302,13 @@ class _PageLoginState extends State<PageLogin> {
                 ),
               );
               break;
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  preinscription(),
-                  fullscreenDialog: true,
-                  maintainState: true,
-                ),
-              );
-              break;
+          
           }
           setState(() {
             _selectedIndex = index;
           });
         },
-        items: Consts.navBarItems,
-      ),
+        items: checkuser ? Consts.navBarItems2: Consts.navBarItems),
     );
   }
 
