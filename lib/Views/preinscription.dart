@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Enseignant.dart';
 import '../Semester.dart';
@@ -19,6 +20,7 @@ class preinscription extends StatefulWidget {
 
 class _preinscription extends State<preinscription> {
   int _selectedIndex = 3;
+   bool checkuser=false;
  
    final formKey = GlobalKey<FormState>();
   String? name = "";
@@ -34,6 +36,14 @@ class _preinscription extends State<preinscription> {
   @override
   void initState() {
     super.initState();
+    _checkUserId();
+  }
+  void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
   }
  void submitForm() async {
   if (!formKey.currentState!.validate()) {
@@ -264,7 +274,7 @@ class _preinscription extends State<preinscription> {
               _selectedIndex = index;
             });
           },
-          items: Consts.navBarItems),    );
+          items: checkuser ? Consts.navBarItems2: Consts.navBarItems),   );
 
   }
 }

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/Consts.dart';
 import '../Views/InfoPage.dart';
 import '../Widgets/MenuBar.dart';
+import '../Widgets/MenuBar2.dart';
 
 
 void main() {
@@ -36,6 +38,19 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
    int _selectedIndex = 2;
+   bool checkuser=false;
+     @override
+  void initState() {
+    super.initState();
+    _checkUserId();
+  }
+    void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +68,7 @@ class _FormPageState extends State<FormPage> {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
-      drawer: buildMenuBar(selectedIndex: _selectedIndex),
+      drawer: checkuser ? buildMenuBar2(selectedIndex: _selectedIndex) : buildMenuBar(selectedIndex: _selectedIndex),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -128,7 +143,7 @@ class _FormPageState extends State<FormPage> {
             _selectedIndex = index;
           });
         },
-        items: Consts.navBarItems,
+        items: checkuser ? Consts.navBarItems2: Consts.navBarItems,
       ),
    
     );

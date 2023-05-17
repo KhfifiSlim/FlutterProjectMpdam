@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/Views/preinscription.dart';
 import 'package:http/http.dart' as http;
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'dart:convert';
 
+import '../Utils/Consts.dart';
 import '../models/AbsenceResp.dart';
 import '../Services/ApiClient.dart';
+import 'FormPage.dart';
+import 'InfoPage.dart';
 
 class StudentAbcencePage extends StatefulWidget {
   @override
@@ -11,6 +16,10 @@ class StudentAbcencePage extends StatefulWidget {
 }
 class _StudentAbcencePageState extends State<StudentAbcencePage> {
   late Future<AbsenceResp> futureStudent;
+    bool checkuser=true;
+      int _selectedIndex = 0;
+
+
 
   @override
   void initState() {
@@ -34,7 +43,7 @@ class _StudentAbcencePageState extends State<StudentAbcencePage> {
               bottomLeft: Radius.circular(25)),
         ),
         elevation: 0.00,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.green[500],
       ),
       body: Center(
         child: FutureBuilder<AbsenceResp>(
@@ -42,23 +51,30 @@ class _StudentAbcencePageState extends State<StudentAbcencePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    SizedBox(height: 20),
+    Expanded(
+  child: ListView.builder(
+    itemCount: snapshot.data?.absences.length ?? 0,
+    itemBuilder: (context, index) {
+      int absenceCount = snapshot.data?.absences[index].absence ?? 0;
+      bool exceedAbsenceLimit = absenceCount >= 3;
 
-                  SizedBox(height: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data?.absences.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(snapshot.data?.absences[index].mat ?? ""),
-                          subtitle: Text('Session manquée: ${snapshot.data?.absences[index].absence.toString() ?? "" }'),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              );
+      return Card(
+        elevation: 3,
+        color: exceedAbsenceLimit ? Colors.red : null,
+        child: ListTile(
+          title: Text(snapshot.data?.absences[index].mat ?? ""),
+          subtitle: Text('Session manquée: ${absenceCount.toString()}'),
+        ),
+      );
+    },
+  ),
+)
+  ],
+);
+
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -67,6 +83,51 @@ class _StudentAbcencePageState extends State<StudentAbcencePage> {
           },
         ),
       ),
+      bottomNavigationBar: SalomonBottomBar(
+          currentIndex: _selectedIndex,
+          selectedItemColor: const Color(0xff6200ee),
+          unselectedItemColor: const Color(0xff757575),
+          onTap: (index) {
+            switch (index) {
+      case 1:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  InfoPage(),
+                    fullscreenDialog: true,
+                    maintainState: true,
+
+                  ),
+                );
+                break; 
+    case 2:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  FormApp(),
+                    fullscreenDialog: true,
+                    maintainState: true,
+
+                  ),
+                );
+                break; 
+    case 3:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  preinscription(),
+                    fullscreenDialog: true,
+                    maintainState: true,
+
+                  ),
+                );
+                break;               
+    }
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          items: checkuser ? Consts.navBarItems2: Consts.navBarItems),
     );
   }
 }

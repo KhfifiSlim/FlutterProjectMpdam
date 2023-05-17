@@ -5,9 +5,10 @@ import 'package:flutterproject/Views/ListeEnseignant.dart';
 import 'package:flutterproject/Views/login.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:flutterproject/Views/StudentAbcencePage.dart';
-import 'package:flutterproject/Views/Absences.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Views/StudentNotesPage.dart';
 import '../Views/preinscription.dart';
 
 
@@ -35,7 +36,24 @@ class Consts {
       selectedColor: Colors.teal,
     ),
   ];
-  static void onItemTapped(BuildContext context,int index) {
+  static final navBarItems2 = [
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.home),
+      title: const Text("Home"),
+      selectedColor: Colors.purple,
+    ),
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.info),
+      title: const Text("Info"),
+      selectedColor: Colors.pink,
+    ),
+    SalomonBottomBarItem(
+      icon: const Icon(Icons.contact_mail),
+      title: const Text("Contact Us"),
+      selectedColor: Colors.orange,
+    ),
+  ];
+  static Future<void> onItemTapped(BuildContext context,int index) async {
     switch (index) {
       case 0:
         Navigator.push(
@@ -94,11 +112,13 @@ class Consts {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  Absences(),
+         builder: (context) =>  StudentNotesPage(),
           ),
         );
         break;
         case 7:
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
         Navigator.push(
           context,
           MaterialPageRoute(

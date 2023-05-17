@@ -4,6 +4,7 @@ import 'package:flutterproject/Views/preinscription.dart';
 import 'package:flutterproject/Views/welcome.dart';
 import 'package:http/http.dart' as http;
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Enseignant.dart';
 import '../Semester.dart';
@@ -21,16 +22,24 @@ class _InfoPageState extends State<InfoPage> {
   List<Semester>? _semesters;
   List<Enseignant>? _enseignants;
   int _selectedIndex = 1;
+  bool checkuser=true;
 
 
 
   @override
   void initState() {
     super.initState();
+    _checkUserId();
     _fetchSemester();
     _fetchEnseignant();
   }
-
+ void _checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasUserId = prefs.containsKey('userid');
+    setState(() {
+      checkuser = hasUserId;
+    });
+  }
   void _fetchSemester() async {
     final response = await http.get(Uri.parse('http://192.168.1.9:3000/semestres'));
     if (response.statusCode == 200) {
@@ -79,79 +88,106 @@ class _InfoPageState extends State<InfoPage> {
         elevation: 0.00,
         backgroundColor: Colors.green[500],
       ),
-      drawer: buildMenuBar(selectedIndex: _selectedIndex),
       body: _semesters != null && _enseignants != null
-          ? ListView.builder(
+    ? ListView.builder(
         itemCount: _semesters!.length,
         itemBuilder: (BuildContext context, int index) {
           final semester = _semesters![index];
           return Card(
             child: Column(
               children: [
-                if (semester.numero == 1)
-                  const ListTile(
-                    title: Text(
-                      'Enseignants',
-                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                    textColor: Colors.blue,
+                if (index == 0)
+                  ExpansionTile(
+  tilePadding: EdgeInsets.symmetric(horizontal: 16.0),
+  title: Text(
+    'Enseignants',
+    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+  ),
+  collapsedTextColor: Colors.black,
+  collapsedIconColor: Colors.black,
+  textColor: Colors.blue,
+  iconColor: Colors.blue,
+  children: [
+    Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: _enseignants!.length,
+        itemBuilder: (BuildContext context, int index) {
+          final enseignant = _enseignants![index];
+          return Card(
+  elevation: 2.0,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+  child: ListTile(
+    title: Text(
+      enseignant.nom,
+      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+    ),
+    subtitle: Text(
+      enseignant.email,
+      style: TextStyle(fontSize: 14.0),
+    )
+  ),
+);
+        },
+      ),
+    ),
+  ],
+),
+
+                ListTile(
+                title: Text(
+                  'Semester ${semester.numero}',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red, // Set the text color to red
                   ),
-                if (semester.numero == 1)
-                   ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: _enseignants!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final enseignant = _enseignants![index];
-                    return ListTile(
-                      title: Text(enseignant.nom),
-                      subtitle: Text(enseignant.email),
-                    );
-                  },
                 ),
-                if (semester.numero == 1)
-                const ListTile(
+              ),
+                Divider(),
+                ExpansionTile(
                   title: Text(
-                    'Plan d"etudes',
+                    'Plan d\'études',
                     style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   textColor: Colors.blue,
-                ),
-                ListTile(
-                  title: Text('Semester ${semester.numero}',style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-                ),
-                Divider(),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: semester.modules.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final module = semester.modules[index];
-                    return Card(
-                      child: Column(
-                        children: [
-                          ListTile(
-                            title: Text(module.nom),
-                            textColor: Colors.deepPurple,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: semester.modules.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final module = semester.modules[index];
+                        return Card(
+                          child: Column(
+                            children: [
+                              ListTile(
+                                title: Text(module.nom),
+                                textColor: Colors.deepPurple,
+                              ),
+                              Divider(),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: module.matieres.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final matiere = module.matieres[index];
+                                  return ListTile(
+                                    title: Text(matiere.nom),
+                                    subtitle: Text('Coefficient: ${matiere.coefficient}, Crédit: ${matiere.credit}'),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                          Divider(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemCount: module.matieres.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final matiere = module.matieres[index];
-                              return ListTile(
-                                title: Text(matiere.nom),
-                                subtitle: Text(
-                                    'Coefficient: ${matiere.coefficient}, Credit: ${matiere.credit}'),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -161,13 +197,13 @@ class _InfoPageState extends State<InfoPage> {
           : Center(
         child: CircularProgressIndicator(),
       ),
-      bottomNavigationBar: SalomonBottomBar(
+       bottomNavigationBar: SalomonBottomBar(
           currentIndex: _selectedIndex,
           selectedItemColor: const Color(0xff6200ee),
           unselectedItemColor: const Color(0xff757575),
           onTap: (index) {
             switch (index) {
-              case 0:
+                    case 0:
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -175,6 +211,16 @@ class _InfoPageState extends State<InfoPage> {
                     fullscreenDialog: true,
                     maintainState: true,
 
+                  ),
+                );
+                break;
+              case 1:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  InfoPage(),
+                    fullscreenDialog: true,
+                    maintainState: true,
                   ),
                 );
                 break;
@@ -190,18 +236,6 @@ class _InfoPageState extends State<InfoPage> {
                   ),
                 );
                 break;
-              case 3:
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>  preinscription(),
-                    fullscreenDialog: true,
-                    maintainState: true,
-
-                  ),
-                );
-                break;
 
             }
 
@@ -209,7 +243,7 @@ class _InfoPageState extends State<InfoPage> {
               _selectedIndex = index;
             });
           },
-          items: Consts.navBarItems),
+          items: checkuser ? Consts.navBarItems2: Consts.navBarItems),
     );
 
   }

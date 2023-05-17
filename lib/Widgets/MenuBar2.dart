@@ -3,12 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/Consts.dart';
 import '../Views/welcome.dart';
 
-Widget buildMenuBar({required int selectedIndex}) {
-  return MenuBar(selectedIndex: selectedIndex);
+Widget buildMenuBar2({required int selectedIndex}) {
+  return MenuBar2(selectedIndex: selectedIndex);
 }
 
-class MenuBar extends StatelessWidget {
-  const MenuBar({
+class MenuBar2 extends StatelessWidget {
+  const MenuBar2({
     Key? key,
     required this.selectedIndex,
   }) : super(key: key);
@@ -55,19 +55,34 @@ class MenuBar extends StatelessWidget {
             },
             selected: selectedIndex == 2,
           ),
-          ListTile(
-            leading: const Icon(Icons.contact_page),
-            title: const Text('Pré-inscription'),
-            onTap: () {
-              Consts.onItemTapped(context, 3);
-            },
-            selected: selectedIndex == 3,
+         ExpansionTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Listes'),
+            children: [
+              ListTile(
+                leading: const Icon(Icons.table_rows_outlined),
+                title: const Text('Liste des absences'),
+                onTap: () {
+                  Consts.onItemTapped(context, 4);
+                },
+                selected: selectedIndex == 4,
+              ),
+              ListTile(
+                leading: const Icon(Icons.note),
+                title: const Text('Liste des notes'),
+                onTap: () {
+                  Consts.onItemTapped(context, 6);
+                },
+                selected: selectedIndex == 4,
+              ),
+              // Add more ListTiles for additional options
+            ],
           ),
           Divider(),
           Spacer(),
           ListTile(
             leading: const Icon(Icons.login),
-            title: const Text('Login'),
+            title: const Text('Logout'),
             onTap: () {
               Consts.onItemTapped(context, 7);
             },
