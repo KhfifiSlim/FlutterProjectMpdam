@@ -11,9 +11,11 @@ class ApiClient {
     static var client = http.Client();
 static String idlogged = "";
   static int userTel = 0;
+  static int role = 0;
 
-  
- static const String url="127.0.0.1:4000";
+  static const String urlbase="http://127.0.0.1:4000";
+  //5alehom zouz
+ static const String urltest="127.0.0.1:4000";
 
  //student absences
  static Future<AbsenceResp> fetchStudent() async {
@@ -21,7 +23,7 @@ static String idlogged = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('userid');
     final response =
-    await http.get(Uri.parse('http://127.0.0.1:4000/absence/list/${uid}'));
+    await http.get(Uri.parse('$urlbase/absence/list/${uid}'));
 
     if (response.statusCode == 200) {
       return AbsenceResp.fromJson(jsonDecode(response.body));
@@ -35,7 +37,7 @@ static String idlogged = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('userid');
     final response =
-    await http.get(Uri.parse('http://127.0.0.1:4000/note/list/${uid}'));
+    await http.get(Uri.parse('$urlbase/note/list/${uid}'));
 
     if (response.statusCode == 200) {
       return NotesResp.fromJson(jsonDecode(response.body));
@@ -44,7 +46,7 @@ static String idlogged = "";
     }
   }
  static Future<void> postpreinscription(String requestBodyJson) async {
-  Uri url = Uri.parse('http://127.0.0.1:4000/preinscription/insert');
+  Uri url = Uri.parse('$urlbase/preinscription/insert');
 
   http.Response response = await http.post(
     url,
@@ -71,7 +73,7 @@ static Future<String> login(
 
   const loginAPI = "/users/login";
     var url2 = Uri.http(
-      url,
+      urltest,
       loginAPI,
     );
 
@@ -82,21 +84,30 @@ static Future<String> login(
     );
     var responseBody = jsonDecode(response.body);
     var message = responseBody['message'];
+    
+  
     if (message == "Success") {
    
       var responseBody = jsonDecode(response.body);
       var token = responseBody['data']['token'];
       idlogged = responseBody['data']['id'];
-      userTel = responseBody['data']['tel'];  
-       SharedPreferences.getInstance().then((SharedPreferences prefs) {
-       prefs.setString('token' , token);
-       prefs.setString('userid' , idlogged);
+      userTel = responseBody['data']['tel']; 
+      role = responseBody['data']['role'];  
        
-      
+    if(role==4)
+    {
+      SharedPreferences.getInstance().then((SharedPreferences prefs) {
+       prefs.setString('token' , token);
+       prefs.setInt('role' , role);
+       prefs.setString('userid' , idlogged);
+
+
     });
+      return "SuccessApp";
+    }
     
 
-      return "Success";
+      return "SuccessNon";
     } else if (message == "Invalid Email!") {
       return "Invalid Email!";
     } else if (message == "Invalid Password!") {

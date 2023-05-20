@@ -13,6 +13,7 @@ import 'FormPage.dart';
 import '../Widgets/MenuBar.dart';
 import 'welcome.dart';
 
+
 class InfoPage extends StatefulWidget {
   @override
   _InfoPageState createState() => _InfoPageState();
@@ -40,6 +41,7 @@ class _InfoPageState extends State<InfoPage> {
       checkuser = hasUserId;
     });
   }
+  //json-server --host 192.168.43.35 db.json --port 3004
   void _fetchSemester() async {
     final response = await http.get(Uri.parse('http://192.168.1.9:3000/semestres'));
     if (response.statusCode == 200) {

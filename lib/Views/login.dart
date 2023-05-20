@@ -209,12 +209,18 @@ class _PageLoginState extends State<PageLogin> {
                       });
                      // print("aaaaaaa123"+response);
 
-                      if (response == "Success") {
+                      if (response == "SuccessApp") {
                          Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => welcome()),
         );
-                      } else if (response == "Invalid Email!") {
+                      }
+                      else if (response == "SuccessNon") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('User Waiting for approuvement')),
+                      );
+                      }
+                       else if (response == "Invalid Email!") {
                         ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Invalid Email')),
                       );

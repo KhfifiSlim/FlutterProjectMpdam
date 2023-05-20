@@ -102,10 +102,10 @@ void _fetchWelcome() async {
                     backgroundColor: Colors.green[500],
                     radius: 108,
                     child: const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://scontent.fnbe1-2.fna.fbcdn.net/v/t39.30808-6/308189261_469439475223960_2889498895712780959_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=e3f864&_nc_ohc=xIzUi5ltVIMAX8b4gbJ&_nc_ht=scontent.fnbe1-2.fna&oh=00_AfC-tETO7ayvvhDCi5tQDxUxp7E_fu3OuHZ4jeHVkISA2Q&oe=64602967"), //NetworkImage
-                      radius: 100,
-                    ), //CircleAvatar
+                    backgroundImage: AssetImage("assets/institut.gif"),
+                    radius: 150,
+                  )
+                  , //CircleAvatar
                   ), //CircleAvatar
                   const SizedBox(
                     height: 10,
